@@ -1,0 +1,14 @@
+Package: FitCurve
+Title: Nonlinear Curve Fitting
+Version: 1.0
+Authors@R: person("Krzysztof", "Trajkowski", email = "seaproject@poczta.onet.pl", role = c("aut", "cre"))
+Description: Self starting models (with ‘automatic initial values’). Based on the examples code from standard R self-starting models.
+Depends:
+    R (>= 3.5.0), bbmle (>= 1.0.20), minpack.lm (>= 1.2-1)
+License: GPL-2
+VignetteBuilder: knitr
+LazyData: true
+Encoding: UTF-8
+RoxygenNote: 6.1.1
+Suggests: knitr,
+    rmarkdown

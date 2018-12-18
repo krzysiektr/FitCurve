@@ -1,0 +1,299 @@
+---
+title: "Nonlinear Curve Fitting"
+author: "Krzysztof Trajkowski"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+               toc: yes
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(fig.align="center",
+               fig.width=6, fig.height=4,
+               dev.args=list(pointsize=8),
+               par=TRUE)
+
+knit_hooks$set(par = function(before, options, envir)
+  { if(before && options$fig.show != "none") 
+       par(mar=c(4,4,1,1)+0.1, mgp=c(3,0.6,0),las=1)
+})
+```
+
+# Library
+
+```{r}
+library("FitCurve")
+```
+
+# Nonlinear Least Squares
+
+## Exponential curve
+
+Exponential function - **SSexpo**:
+$$f(x)=ab^x$$
+
+### Levenberg-Marquardt algorithm
+
+```{r}
+expo <- nlsLM(USA~SSexpo(year,a,b),
+              data=subset(smoking,year<="1949"))
+summary(expo)
+```
+
+### Plot
+
+```{r}
+with(plot(y=USA,x=year,type="l",lwd=2,
+          xlim=c(1900,2030),ylim=c(0,12)),
+     data=subset(smoking,year<="1949"))
+title("Sales of cigarettes per adult per day in USA 1927-1949")
+p <- coef(expo)
+curve(SSexpo(x,p[1],p[2]),add=TRUE,col="orange3",lwd=2)
+```
+
+## Logistic curve
+
+Logistic function - [SSlogis](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/SSlogis.html):
+$$f(x)=\frac{Asym}{1+\exp{\left(\frac{xmid-x}{scal}\right)}}$$
+
+* Inflection point:
+
+$$xmid$$
+
+Logistic function - **SSlogis1**:
+$$a=Asym,\quad b=\frac{xmid}{scal},\quad c=-\frac{1}{scal}$$
+$$f(x)=\frac{a}{1+\exp{(b+cx)}}$$
+
+* Inflection point:
+
+$$-b/c$$
+
+Logistic function - **SSlogis2**:
+$$\alpha=Asym,\quad \beta=\exp{\left(\frac{xmid}{scal}\right)},\quad \gamma=\frac{1}{scal}$$
+$$f(x)=\frac{\alpha}{1+\beta\exp{(-\gamma x)}}$$
+
+* Inflection point:
+
+$$\ln(\beta)/\gamma$$
+
+and other models of the [drc](https://cran.r-project.org/web/packages/drc/) package.
+
+### nl2sol algorithm
+
+```{r}
+logi <- nls(USA~SSlogis(year,Asym,xmid,scal),
+            algorithm = "port",
+            data=subset(smoking,year<="1966"))
+summary(logi)
+```
+
+### Plot
+
+```{r}
+with(plot(y=USA,x=year,type="l",lwd=2,
+          xlim=c(1900,2030),ylim=c(0,12)),
+     data=subset(smoking,year<="1966"))
+title("Sales of cigarettes per adult per day in USA 1927-1966")
+p <- coef(logi)
+curve(SSlogis(x,p[1],p[2],p[3]),add=TRUE,col="orange3",lwd=2)
+```
+
+## Bell curve
+
+Amplitude version of Gaussian peak function - **SSgaussAmp**:
+$$f(x)=y_{0}+A\exp{\left(\frac{-(x-x_c)^2}{2w^2}\right)}$$
+
+* Inflection point:
+
+$$x_L=x_c-\frac{1}{w},\quad x_U=x_c+\frac{1}{w}$$
+
+Area version of Gaussian Function - **SSgaussAre**:
+$$f(x)=y_0+\frac{A}{w\sqrt{\pi/2}}\exp{\left(-2\frac{(x-x_c)^2}{w^2}\right)}$$
+
+* Inflection point:
+
+$$x_L=x_c-\frac{w}{2},\quad x_U=x_c+\frac{w}{2}$$
+
+### Gauss-Newton algorithm
+
+```{r}
+amp <- nls(USA ~ SSgaussAmp(year,y0,A,xc,w),
+           data=smoking)
+summary(amp)
+```
+
+### Plot
+
+```{r,fig.height=4,fig.width=6}
+with(plot(year,USA,type="l",lwd=2,
+          xlim=c(1900,2030),ylim=c(0,12)),
+     data=smoking)
+title("Sales of cigarettes per adult per day in USA 1927-2010")
+p <- coef(amp)
+curve(SSgaussAmp(x,p[1],p[2],p[3],p[4]),add=TRUE,col="orange3",lwd=2)
+```
+
+# Maximum Likelihood Estimation
+
+## Four-Parameter Logistic curve
+
+Four-Parameter Logistic -  [SSfpl](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/SSfpl.html):
+$$f(x)=\frac{B-A}{1+\exp{\left(\frac{xmid-x}{scal}\right)}}+A$$
+
+### L-BFGS-B algorithm
+
+```{r}
+p <- getInitial(population~SSfpl(year,A,B,xmid,scal),data=population)
+```
+```{r}
+fpl_nor <- mle2(population~dnorm(mean= SSfpl(year,A,B,xmid,scal),sd= sd),
+                start=list(A= p[1], B= p[2], xmid= p[3], scal= p[4], sd= 1),
+                method= "L-BFGS-B", data= population,
+                lower=c(A=-Inf,B=-Inf,xmid=-Inf,scal=-Inf,sd=0))
+summary(fpl_nor)
+```
+
+### Plot
+
+```{r,fig.height=4,fig.width=6}
+with(plot(year,population,type="l",lwd=3,
+          xlim=c(1800,2100),ylim=c(0,45e+07)),
+     data=population)
+title("Population in USA 1790-2010")
+p <- coef(fpl_nor)
+curve(SSfpl(x,p[1],p[2],p[3],p[4]),add=TRUE,col="orange3",lwd=1.5)
+```
+
+## Logistic curve
+
+Logistic function - [SSlogis](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/SSlogis.html):
+$$f(x)=\frac{Asym}{1+\exp{\left(\frac{xmid-x}{scal}\right)}}$$
+
+### L-BFGS-B algorithm
+
+```{r}
+p <- getInitial(population~SSlogis(year,Asym,xmid,scal),data=population)
+```
+```{r}
+logi_nor <- mle2(population~dnorm(mean= SSlogis(year,Asym,xmid,scal),sd= sd),
+                 start=list(Asym= p[1], xmid= p[2], scal= p[3], sd= 1),
+                 method= "L-BFGS-B", data= population,
+                 lower=c(Asym=-Inf,xmid=-Inf,scal=-Inf,sd=0))
+summary(logi_nor)
+```
+
+### Plot
+
+```{r,fig.height=4,fig.width=6}
+with(plot(year,population,type="l",lwd=3,
+          xlim=c(1800,2100),ylim=c(0,45e+07)),
+     data=population)
+title("Population in USA 1790-2010")
+p <- coef(logi_nor)
+curve(SSlogis(x,p[1],p[2],p[3]),add=TRUE,col="orange3",lwd=1.5)
+```
+
+# A list of all functions
+
+---
+
+**SSexpo** - exponential model:
+$$f(x)=ab^x$$
+
+---
+
+**SSexpoGen**	- general exponential model:
+$$f(x)=a\exp{(bx)}$$
+
+---
+
+**SSexpoInv**	- exponential inverse model:
+$$f(x)=a\exp{\left(b\frac{1}{x}\right)}$$
+
+---
+
+**SSgaussAmp** - amplitude of gaussian model:
+$$f(x)=y_{0}+A\exp{\left(\frac{-(x-x_c)^2}{2w^2}\right)}$$
+
+---
+
+**SSgaussAre** - area of gaussian model:
+$$f(x)=y_0+\frac{A}{w\sqrt{\pi/2}}\exp{\left(-2\frac{(x-x_c)^2}{w^2}\right)}$$
+
+---
+
+**SShyper**	- hyperbolic model:
+$$f(x)=\frac{ax^2}{x+b}$$
+
+---
+
+**SSlogis1** - logistic model:
+$$f(x)=\frac{a}{1+\exp{(b+cx)}}$$
+
+----
+
+**SSlogis2** - logistic model:
+$$f(x)=\frac{\alpha}{1+\beta\exp{(-\gamma x)}}$$
+
+---
+
+**SSlorentz** - lorentz model:
+$$f(x)=y_0+A\frac{2w}{\pi4(x-x_c)^2+w^2}$$
+
+---
+
+**SSparLog** - parabola logarithmic model:
+$$f(x)=ax^{b+c\ln(x)}$$
+
+---
+
+**SSpower** - power model:
+$$f(x)=ax^b$$
+
+---
+
+**SSpowExpo** - power-exponential model:
+$$f(x)=ax^b\exp{(cx)}$$
+
+---
+
+**SSpowExpoInv** - power-exponential-inverse model:
+$$f(x)=ax^b\exp{\left(c\frac{1}{x}\right)}$$
+
+---
+
+**SSpsVoigt1** - Pseudo-Voigt model:
+$$f(x)=y_0+A\left[\nu\frac{2w}{\pi4(x-x_c)^2+w^2}+(1-\nu)\frac{\sqrt{4\ln 2}}{\sqrt{\pi}w}\exp\left(-\frac{4\ln 2}{w^2}(x-x_c)^2\right)\right]$$
+
+---
+
+**SSpsVoigt2** - Pseudo-Voigt model with different FWHM ($w_L$ and $w_G$):
+$$f(x)=y_0+A\left[\nu\frac{2w_L}{\pi4(x-x_c)^2+w_L^2}+(1-\nu)\frac{\sqrt{4\ln 2}}{\sqrt{\pi}w_G}\exp\left(-\frac{4\ln 2}{w_G^2}(x-x_c)^2\right)\right]$$
+
+---
+
+**SStorn1** - Tornquist I model:
+$$f(x)=\frac{ax}{x+b}$$
+
+---
+
+**SStorn2** - Tornquist II model:
+$$f(x)=\frac{a(x-c)}{x+b}$$
+
+---
+
+**SStorn3** - Tornquist III model:
+$$f(x)=\frac{ax(x-c)}{x+b}$$
+
+---
+
+**SSworking** - Working model:
+$$f(x)=\exp{\left[a+b\left(\frac{1}{x}\right)\right]}$$
+
+---
+
