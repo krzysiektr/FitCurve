@@ -2,7 +2,7 @@
 
 ## Install
 
-From GitHub
+From GitHub:
 
 * dependencies
 
