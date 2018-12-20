@@ -33,7 +33,7 @@ data(smoking)
 model <- nlsLM(USA ~ SSpsVoigt1(year,y0,A,nu,xc,w),data=smoking)
 }
 \references{
-qtiplot: \url{http://www.qtiplot.com/doc/manual-en/x7261.html#sec-fit-psdvoigt1}.
+qtiplot: \url{https://www.qtiplot.com/doc/manual-en/x9885.html}.
 }
 \seealso{
 \code{\link{selfStart}}, \code{\link{getInitial}}
