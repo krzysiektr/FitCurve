@@ -19,7 +19,7 @@
 #' model <- nlsLM(USA ~ SSpsVoigt1(year,y0,A,nu,xc,w),data=smoking)
 #' @rdname SSpsVoigt1
 #'
-#' @references qtiplot: \url{http://www.qtiplot.com/doc/manual-en/x7261.html#sec-fit-psdvoigt1}.
+#' @references qtiplot: \url{https://www.qtiplot.com/doc/manual-en/x9885.html}.
 #'
 #' @export
 #'
