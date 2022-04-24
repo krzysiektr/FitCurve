@@ -4,7 +4,9 @@
 \name{population}
 \alias{population}
 \title{Population in USA 1790-2010}
-\format{This data frame contains the observations of 23.}
+\format{
+This data frame contains the observations of 23.
+}
 \source{
 US Bureau of the Census. Web: \url{http://www.census.gov}.
 }

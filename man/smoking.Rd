@@ -4,7 +4,9 @@
 \name{smoking}
 \alias{smoking}
 \title{Smoking data}
-\format{This data frame contains the observations of 91.}
+\format{
+This data frame contains the observations of 91.
+}
 \source{
 Max Roser (2016) – 'Smoking'. Published online at OurWorldInData.org. Retrieved from: \url{https://ourworldindata.org/smoking} [Online Resource].
 
