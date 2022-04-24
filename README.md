@@ -14,7 +14,7 @@ install.packages("minpack.lm")
 * FitCurve package:
 
 ```
-devtools::install_github("krzysiektr/FitCurve")
+devtools::install_github("krzysiektr/FitCurve", build_vignettes = TRUE)
 ```
 
 ## Example
