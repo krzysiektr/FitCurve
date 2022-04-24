@@ -21,7 +21,7 @@ devtools::install_github("krzysiektr/FitCurve", build_vignettes = TRUE)
 
 Tornquist II model:
 
-$$f(x)=\frac{a(x-c)}{x+b}$$
+$f(x)=\frac{a(x-c)}{x+b}$
 
 ```{r}
 library("FitCurve")
