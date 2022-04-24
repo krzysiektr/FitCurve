@@ -1,7 +1,3 @@
----
-mathjax: true
----
-
 # FitCurve
 
 ## Install
@@ -24,6 +20,7 @@ devtools::install_github("krzysiektr/FitCurve", build_vignettes = TRUE)
 ## Example
 
 Tornquist II model:
+
 $$f(x)=\frac{a(x-c)}{x+b}$$
 
 ```{r}
