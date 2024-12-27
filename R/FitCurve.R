@@ -43,7 +43,7 @@ SStorn1 <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -101,7 +101,7 @@ SStorn2 <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -160,7 +160,7 @@ SStorn3 <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -215,7 +215,7 @@ SSworking <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -274,7 +274,7 @@ SSlogis1 <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -333,7 +333,7 @@ SSlogis2 <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -388,7 +388,7 @@ SSpower <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -445,7 +445,7 @@ SSexpo <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -500,7 +500,7 @@ SSexpoInv <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -558,7 +558,7 @@ SSpowExpo <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -617,7 +617,7 @@ SSpowExpoInv <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -674,7 +674,7 @@ SSparLog <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -730,7 +730,7 @@ SShyper <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -784,7 +784,7 @@ SSexpoGen <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -843,7 +843,7 @@ SSgaussAmp <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -906,7 +906,7 @@ SSgaussAre <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
@@ -968,7 +968,7 @@ SSlorentz <- selfStart(
     }
     .value
   },
-  function(mCall, data, LHS)
+  function(mCall, data, LHS, ...)
   {
     xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
     if(nrow(xy) < 2) {
