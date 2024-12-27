@@ -67,7 +67,7 @@ function (input, y0, A, nu, xc, w)
     }
     .value
 },
-function(mCall, data, LHS)
+function(mCall, data, LHS, ...)
           {
 xy <- data.frame(sortedXyData(mCall[["input"]], LHS, data))
 if(nrow(xy) < 2) {
